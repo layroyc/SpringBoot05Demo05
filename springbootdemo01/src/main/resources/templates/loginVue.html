@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script type="text/javascript" src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    账号：  <input type="text"  v-model="account"   > <br>
+    密码：  <input type="password"  v-model="pwd" > <br>
+    <button @click="login" >登录</button><br>
+    <input type="checkbox"  v-model="rememberMe" name="rememberMe" > 记住我<br>{{rememberMe}}
+</div>
+<script >
+    var  vm = new Vue({
+        el:"#app",
+        data:{
+            account:'',
+            pwd:'',
+            rememberMe:''
+        },
+        methods:{
+            login:function () {
+                console.log(this.pwd)
+                console.log(this.account)
+                // 调用 axios 发送到后台
+                axios.post("/api/admin/loginByShiro",{
+                    adminAccount:this.account,
+                    adminPwd:this.pwd,
+                    rememberMe: this.rememberMe
+                }).then(res=>{
+                    console.log(res)
+                    if(res.data.code==20000){
+                        //跳转
+                        window.location.href="/page/studentList"
+                    }else{
+                        alert("密码错误，请重新输入！")
+                    }
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>
